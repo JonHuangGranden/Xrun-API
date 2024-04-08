@@ -1,0 +1,6 @@
+@看課程_HostAddress = http://localhost:5173
+
+GET {{看課程_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

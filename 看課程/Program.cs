@@ -1,14 +1,31 @@
-using 看課程;
+using MongoD;
+using 看課程.Services.DataService;
+using 看課程.Services.DataService.Interface;
+using 看課程.Services.Identity;
+using Service.Identity.Interface;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-
 //=====
 builder.Services.Configure<MongoDbSettings>(
     builder.Configuration.GetSection("MongoDbSettings"));
-builder.Services.AddSingleton<DataService>();
+
+
+//builder.Services.AddSingleton<IDataService, DataService>();
+
+if (builder.Environment.IsProduction())
+{
+    builder.Services.AddSingleton<IDataService, MySQLService>();
+}
+else
+{
+    //builder.Services.AddSingleton<IDataService, DataService>();
+    builder.Services.AddSingleton<IIdentityService, IdentityService>();
+
+}
 
 //=====
 

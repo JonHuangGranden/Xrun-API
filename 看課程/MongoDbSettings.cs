@@ -1,4 +1,5 @@
-﻿namespace 看課程
+﻿namespace MongoD
+
 {
     public class MongoDbSettings
     {

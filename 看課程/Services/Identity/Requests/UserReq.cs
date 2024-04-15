@@ -1,11 +1,7 @@
 ﻿using System;
 namespace 看課程.Service.Identity.Requests
 {
-    public class LoginReq
-    {
-        public string UserEmail { get; set; }
-        public string UserPassword { get; set; }
-    }
+
 
     public class UserRequestToRegister
     {
@@ -23,7 +19,11 @@ namespace 看課程.Service.Identity.Requests
         public string PasswordToHash { get; set; }
         public string Salt { get; set; }
     }
-
+    public class LoginReq
+    {
+        public string UserEmail { get; set; }
+        public string UserPassword { get; set; }
+    }
 
 
 

@@ -13,7 +13,7 @@ namespace 看課程.Services.Identity
 {
     public class IdentityService : IIdentityService
     {
-        private readonly IMongoCollection<User> _usersCollection;
+        private readonly IMongoCollection<UserDataToDB> _usersCollection;
         //IMongoCollection是MongoDB 的官方.NET 驱动程序（MongoDB.NET Driver）提供的接口。
         //User 是一个类，表示 MongoDB 中的一个文档，通常用于表示用户的数据。
         //    这意味着 _usersCollection 是一个包含用户文档的集合
@@ -21,7 +21,7 @@ namespace 看課程.Services.Identity
         {
             var mongoClient = new MongoClient(mongoDbSettings.Value.ConnectionString);
             var mongoDatabase = mongoClient.GetDatabase(mongoDbSettings.Value.DatabaseName);
-            _usersCollection = mongoDatabase.GetCollection<User>("UsersWithSalt");
+            _usersCollection = mongoDatabase.GetCollection<UserDataToDB>("UsersWithSalt");
         }
 
         //public async Task<object> Register(RegisterRequest registerRequest)
@@ -34,7 +34,7 @@ namespace 看課程.Services.Identity
         {
             var salt = PasswordWithSaltHashHelper.GenerateSalt();
             var passwordHash = PasswordWithSaltHashHelper.GenerateHash(userRequestToRegister.Password, salt);
-            var user = new User()
+            var user = new UserDataToDB()
             {
                 Id = userRequestToRegister.Id,
                 Email = userRequestToRegister.Email,
@@ -52,13 +52,10 @@ namespace 看課程.Services.Identity
 
             if (user != null)
             {
-
-
                 if (PasswordWithSaltHashHelper.ValidatePassword(loginReq.UserPassword, user.PasswordToHash, user.Salt)) {
-
                     //return "成功";
                     var token = JWTHelper.GenerateToken(
-                       "testtesttesttesttesttesttest",  // 应从配置或安全源获取
+                       "testtesttesttesttesttestte22542432442445224st",  // 应从配置或安全源获取
                           "id",
                       // user.Id,  // 使用用户ID生成Token
                        DateTime.UtcNow.AddDays(7)  // Token有效期

@@ -40,8 +40,7 @@ public class DataService : IDataService
             Password= userRequest.Password,
             PasswordToHash = passwordHash,
             Salt = salt
-            
-        };
+                    };
         // 資料庫加鹽（此处假设数据库操作能够处理额外字段）
         await _usersCollection.InsertOneAsync(user);
         //使用 _usersCollection.InsertOneAsync(user) 将新创建的 User 对象插入到MongoDB的集合中。这是一个异步操作，await 关键字用于等待这个操作完成。

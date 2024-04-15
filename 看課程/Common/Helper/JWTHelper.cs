@@ -38,7 +38,7 @@ namespace Common.Helper
             {
                 ValidateIssuer = false, // 不验证发行者
                 ValidateAudience = false, // 不验证观众
-                ValidateLifetime = false, // 不验证生命周期（过期时间），如果JWT实际有过期时间，这里应为true
+                ValidateLifetime = true, //如果JWT实际有过期时间，这里应为true
                 ValidateIssuerSigningKey = true, // 验证签名密钥
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)) // 签名密钥
             };

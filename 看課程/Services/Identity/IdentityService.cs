@@ -2,11 +2,12 @@
 using Service.Identity.Interface;
 using 看課程.Service.Identity.Requests;
 using Common.Helper;
-using 看課程.Models;
+//using 看課程.Models;
 using Microsoft.Extensions.Options;
 using MongoD;
 using MongoDB.Driver;
 using Microsoft.AspNetCore.Mvc;
+using 看課程.Service.Identity.Response;
 
 
 namespace 看課程.Services.Identity
@@ -24,12 +25,7 @@ namespace 看課程.Services.Identity
             _usersCollection = mongoDatabase.GetCollection<UserDataToDB>("UsersWithSalt");
         }
 
-        //public async Task<object> Register(RegisterRequest registerRequest)
-        //{
-
-        //}
-
-        public async Task Register(UserRequestToRegister userRequestToRegister)
+        public async Task Register(RegisterReq userRequestToRegister)
 
         {
             var salt = PasswordWithSaltHashHelper.GenerateSalt();
@@ -46,33 +42,33 @@ namespace 看課程.Services.Identity
         }
 
 
-        public async Task<object> Login(LoginReq loginReq)
+        public async Task<LoginResult> Login(LoginReq loginReq)
         {
             var user = await _usersCollection.Find(u => u.Email == loginReq.UserEmail).FirstOrDefaultAsync();
 
+            if (user == null)
+            {
+                return new LoginResult { Success = false, ErrorMessage = "帳號不存在" };
+            }
             if (user != null)
             {
                 if (PasswordWithSaltHashHelper.ValidatePassword(loginReq.UserPassword, user.PasswordToHash, user.Salt)) {
-                    //return "成功";
                     var token = JWTHelper.GenerateToken(
-                       "testtesttesttesttesttestte22542432442445224st",  // 应从配置或安全源获取
-                          "id",
-                      // user.Id,  // 使用用户ID生成Token
-                       DateTime.UtcNow.AddDays(7)  // Token有效期
+                       "testtesttesttesttesttesttest123123123123123123",  // 從配置或安全源取得
+                        user.Id,
+                        DateTime.UtcNow.AddDays(7)  // Token有效期
                     );
-
-                    return token;
+                    return new LoginResult
+                    {
+                        Success = true,
+                        Token = token,
+                        UserName = user.Name
+                    };
                 }
-                return "密碼錯誤";
+                return new LoginResult { Success = false, ErrorMessage = "密碼錯誤" };
             }
-
-            return "null";
+            return new LoginResult { Success = false, ErrorMessage = "錯誤" };
 
         }
-
-
-
-
-
     }
 }

@@ -1,33 +1,37 @@
-using MongoD;
-using �ݽҵ{.Services.DataService;
-using �ݽҵ{.Services.DataService.Interface;
-using �ݽҵ{.Services.Identity;
+﻿using MongoD;
+//using 看課程.Services.DataService;
+//using 看課程.Services.DataService.Interface;
+using 看課程.Services.Identity;
 using Service.Identity.Interface;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = false,  
+        ValidateAudience = false, 
+        ValidateLifetime = true,  
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("jonhuangtestkey.Secret.Token.Access")) 
+    };
+});
+
+
+
 // Add services to the container.
-//=====
 builder.Services.Configure<MongoDbSettings>(
     builder.Configuration.GetSection("MongoDbSettings"));
 
 
-//builder.Services.AddSingleton<IDataService, DataService>();
-
-if (builder.Environment.IsProduction())
-{
-    builder.Services.AddSingleton<IDataService, MySQLService>();
-}
-else
-{
-    //builder.Services.AddSingleton<IDataService, DataService>();
-    builder.Services.AddSingleton<IIdentityService, IdentityService>();
-
-}
-
-//=====
+builder.Services.AddSingleton<IIdentityService, IdentityService>();
 
 
 builder.Services.AddControllers();
@@ -42,9 +46,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage(); // ?
+
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication(); // jwt
 
 app.UseAuthorization();
 

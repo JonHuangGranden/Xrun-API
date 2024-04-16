@@ -21,8 +21,5 @@ namespace 看課程.Service.Identity.Requests
         public string UserEmail { get; set; }
         public string UserPassword { get; set; }
     }
-
-
-
 }
 

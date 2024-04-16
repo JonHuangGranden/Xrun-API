@@ -25,9 +25,18 @@ namespace 看課程.Services.Identity
             _usersCollection = mongoDatabase.GetCollection<UserDataToDB>("UsersWithSalt");
         }
 
-        public async Task Register(RegisterReq userRequestToRegister)
-
+        public async Task<RegisterRes> Register(RegisterReq userRequestToRegister)
         {
+            var existingUser = await _usersCollection.Find(u => u.Email == userRequestToRegister.Email).FirstOrDefaultAsync();
+            if (existingUser != null)
+            {
+                return new RegisterRes
+                {
+                    Success = false,
+                    Msg = "-此帳號已被註冊-"
+                };
+            }
+
             var salt = PasswordWithSaltHashHelper.GenerateSalt();
             var passwordHash = PasswordWithSaltHashHelper.GenerateHash(userRequestToRegister.Password, salt);
             var user = new UserDataToDB()
@@ -39,36 +48,50 @@ namespace 看課程.Services.Identity
                 Salt = salt
             };
             await _usersCollection.InsertOneAsync(user);
+
+            return new RegisterRes
+            {
+                Success = true,
+                UserName = user.Name,
+                Msg = "註冊成功"
+            };
         }
 
 
-        public async Task<LoginResult> Login(LoginReq loginReq)
+        public async Task<LoginRes> Login(LoginReq loginReq)
         {
-            var user = await _usersCollection.Find(u => u.Email == loginReq.UserEmail).FirstOrDefaultAsync();
 
-            if (user == null)
+            try
             {
-                return new LoginResult { Success = false, ErrorMessage = "帳號不存在" };
-            }
-            if (user != null)
-            {
-                if (PasswordWithSaltHashHelper.ValidatePassword(loginReq.UserPassword, user.PasswordToHash, user.Salt)) {
-                    var token = JWTHelper.GenerateToken(
-                       "testtesttesttesttesttesttest123123123123123123",  // 從配置或安全源取得
-                        user.Id,
-                        DateTime.UtcNow.AddDays(7)  // Token有效期
-                    );
-                    return new LoginResult
-                    {
-                        Success = true,
-                        Token = token,
-                        UserName = user.Name
-                    };
+                var user = await _usersCollection.Find(u => u.Email == loginReq.UserEmail).FirstOrDefaultAsync();
+                if (user == null)
+                {
+                    return new LoginRes { Success = false, Msg = "帳號不存在" };
                 }
-                return new LoginResult { Success = false, ErrorMessage = "密碼錯誤" };
+                if (user != null)
+                {
+                    if (PasswordWithSaltHashHelper.ValidatePassword(loginReq.UserPassword, user.PasswordToHash, user.Salt))
+                    {
+                        var token = JWTHelper.GenerateToken(
+                           "testtesttesttesttesttesttest111111111111111",  // 從配置或安全源取得
+                            user.Id,
+                            DateTime.UtcNow.AddDays(7)  // Token有效期
+                        );
+                        return new LoginRes
+                        {
+                            Success = true,
+                            Token = token,
+                            UserName = user.Name,
+                            Msg = "登入成功"
+                        };
+                    }
+                    return new LoginRes { Success = false, Msg = "密碼錯誤" };
+                }
+                return new LoginRes { Success = false, Msg = "錯誤" };
+            } catch (Exception ex)
+            {
+                return new LoginRes { Success = false, Msg = ex.Message };
             }
-            return new LoginResult { Success = false, ErrorMessage = "錯誤" };
-
         }
     }
 }

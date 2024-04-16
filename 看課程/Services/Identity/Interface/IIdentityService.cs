@@ -11,12 +11,10 @@ namespace Service.Identity.Interface
 {
     public interface IIdentityService
     {
-      
-        Task Register(RegisterReq registerRequest);
-        
-        Task<LoginResult> Login(LoginReq loginRequest);
-        
 
-
+        Task<RegisterRes> Register(RegisterReq registerRequest);
+        
+        Task<LoginRes> Login(LoginReq loginRequest);
+        
     }
 }

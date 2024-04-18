@@ -1,13 +1,9 @@
 ﻿using MongoD;
-//using 看課程.Services.DataService;
-//using 看課程.Services.DataService.Interface;
 using 看課程.Services.Identity;
 using Service.Identity.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +25,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateAudience = false, 
         ValidateLifetime = true,  
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("jonhuangtestkey.Secret.Token.Access")) 
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("refreshToken_secretKey_testtesttest_22222222222222222")),
+        ClockSkew = TimeSpan.Zero
+
     };
 });
 

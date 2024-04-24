@@ -74,18 +74,6 @@ namespace Common.Helper
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         // 验证JWT
         //public static JwtSecurityToken VerifyToken(string jwtToken, string secret)
         //{

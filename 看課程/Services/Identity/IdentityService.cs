@@ -1,5 +1,6 @@
 ﻿using Service.Identity.Interface;
 using 看課程.Service.Identity.Requests;
+
 using Common.Helper;
 using Microsoft.Extensions.Options;
 using MongoD;
@@ -9,26 +10,45 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using System.Diagnostics;
 using System.Linq;
+using 看課程.DataAccess.Identity.Interface;
+using 看課程.DataAccess.Identity.Entity;
 
 
 namespace 看課程.Services.Identity
 {
     public class IdentityService : IIdentityService
     {
-        private readonly IMongoCollection<UserDataToDB> _usersCollection;
-        //IMongoCollection是MongoDB 的官方.NET 驱动程序（MongoDB.NET Driver）提供的接口。
-        //User 是一个类，表示 MongoDB 中的一个文档，通常用于表示用户的数据。
-        //    这意味着 _usersCollection 是一个包含用户文档的集合
-        public IdentityService(IOptions<MongoDbSettings> mongoDbSettings)
+       // private readonly IMongoCollection<UserDataToDB> _usersCollection;
+                            //IMongoCollection是MongoDB 的官方.NET 驱动程序（MongoDB.NET Driver）提供的接口。
+                            //User 是一个类，表示 MongoDB 中的一个文档，通常用于表示用户的数据。
+                            //    这意味着 _usersCollection 是一个包含用户文档的集合
+        //public IdentityService(IOptions<MongoDbSettings> mongoDbSettings)
+                            //IOptions<MongoDbSettings> 不是直接等同于 appsettings.json 文件，
+                            //而是一个用于访问配置数据的接口，这些配置数据通常来源于 appsettings.json。
+                            //IOptions<T> 是 ASP.NET Core 提供的一个机制，用于方便地访问强类型配置数据。
+                            //这里的 T 是一个用户定义的类，用来表示配置信息。在你的例子中，T 是 MongoDbSettings 类。
+        //{
+        //    var mongoClient = new MongoClient(mongoDbSettings.Value.ConnectionString);
+        //var mongoDatabase = mongoClient.GetDatabase(mongoDbSettings.Value.DatabaseName);
+        //_usersCollection = mongoDatabase.GetCollection<UserDataToDB>("UsersWithSalt");
+        //}
+
+
+
+    private readonly IIdentityDataAccess _dataAccess;
+
+        public IdentityService(IIdentityDataAccess dataAccess)
         {
-            var mongoClient = new MongoClient(mongoDbSettings.Value.ConnectionString);
-            var mongoDatabase = mongoClient.GetDatabase(mongoDbSettings.Value.DatabaseName);
-            _usersCollection = mongoDatabase.GetCollection<UserDataToDB>("UsersWithSalt");
+            _dataAccess = dataAccess;
         }
+
+
 
         public async Task<RegisterRes> Register(RegisterReq userRequestToRegister)
         {
-            var existingUser = await _usersCollection.Find(u => u.Email == userRequestToRegister.Email).FirstOrDefaultAsync();
+            //var existingUser = await _usersCollection.Find(u => u.Email == userRequestToRegister.Email).FirstOrDefaultAsync();
+            var existingUser = await _dataAccess.GetUserByEmailAsync(userRequestToRegister.Email);//改用dal的
+
             if (existingUser != null)
             {
                 return new RegisterRes
@@ -47,7 +67,9 @@ namespace 看課程.Services.Identity
                 PasswordToHash = passwordHash,
                 Salt = salt
             };
-            await _usersCollection.InsertOneAsync(user);
+           // await _usersCollection.InsertOneAsync(user);
+            await _dataAccess.InsertUserAsync(user);//改用dal的
+
 
             return new RegisterRes
             {
@@ -64,7 +86,10 @@ namespace 看課程.Services.Identity
         {
             try
             {
-                var user = await _usersCollection.Find(u => u.Email == loginReq.UserEmail).FirstOrDefaultAsync();
+             //   var user = await _usersCollection.Find(u => u.Email == loginReq.UserEmail).FirstOrDefaultAsync();
+                var user = await _dataAccess.GetUserByEmailAsync(loginReq.UserEmail);//改用dal的
+
+
                 if (user == null)
                 {
                     return new LoginRes { Success = false, Msg = "帳號不存在" };
@@ -75,10 +100,12 @@ namespace 看課程.Services.Identity
                     {
 
                         string jtiString = Guid.NewGuid().ToString();
-                        var update = Builders<UserDataToDB>.Update.Set(u => u.CurrJTI, jtiString);
-                        await _usersCollection.UpdateOneAsync(u => u.Id == user.Id, update);
+
+                        //var update = Builders<UserDataToDB>.Update.Set(u => u.CurrJTI, jtiString);
+                        //await _usersCollection.UpdateOneAsync(u => u.Id == user.Id, update);
+                        bool updateSuccess = await _dataAccess.UpdateUserJtiAsync(user.Id, jtiString);//dal取代上面兩行
                         //登入覆蓋舊的jti
-                        
+
                         var accessToken = JWTHelper.GenerateToken(
                             "AccessToken_Key_test_000000000000000000", 
                             user.Id,
@@ -123,8 +150,7 @@ namespace 看課程.Services.Identity
                 var principal = JWTHelper.GetPrincipalFromToken(token, "refreshToken_secretKey_testtesttest_22222222222222222",true);
                 //principal是ClaimsPrincipal 对象
                 if (principal == null)
-                {
-                    //throw new RefreshTokenRes { Success = false, Msg = "token過期" };
+                {               
                      return new RefreshTokenRes { Success = false, Msg = "無效的token" };
                 }
                 //principal是ClaimsPrincipal 对象
@@ -137,7 +163,12 @@ namespace 看課程.Services.Identity
                 }
                 Debug.WriteLine($"token解析後提取的用戶jti為{jtiFromToken}");
                 Debug.WriteLine($"token解析後提取的用戶id: {userId}");
-                var user = await _usersCollection.Find(u => u.Id == userId).FirstOrDefaultAsync();
+
+
+               // var user = await _usersCollection.Find(u => u.Id == userId).FirstOrDefaultAsync();
+                var user = await _dataAccess.FindUserByIdAsync(userId);//改用dal的
+
+
                 Debug.WriteLine($"從資料庫提取的: {user}");
                               //解碼後得到id然後去資料庫找
                 if (user == null)
@@ -151,7 +182,16 @@ namespace 看課程.Services.Identity
                 //====　↓　驗證通過　↓　====
                 string jtiString = Guid.NewGuid().ToString();
                 var update = Builders<UserDataToDB>.Update.Set(u => u.CurrJTI, jtiString);
-                await _usersCollection.UpdateOneAsync(u => u.Id == user.Id, update);
+
+             
+          //     await _usersCollection.UpdateOneAsync(u => u.Id == user.Id, update);
+                bool updateSuccess = await _dataAccess.UpdateUserJtiAsync(user.Id, jtiString);//dal取代上面一行
+
+            
+
+
+
+
                 //更新db中的refresh token
                 var newAccessToken = JWTHelper.GenerateToken(
                 "AccessToken_Key_test_000000000000000000",
@@ -269,24 +309,7 @@ namespace 看課程.Services.Identity
 
 
 
-
-
         //=========================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

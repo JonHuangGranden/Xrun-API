@@ -1,7 +1,6 @@
 ﻿namespace 看課程.Service.Identity.Response
 {
 
-
     public class LoginRes
     {
         public string UserName { get; set; }

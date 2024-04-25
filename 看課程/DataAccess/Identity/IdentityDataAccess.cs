@@ -1,7 +1,6 @@
-﻿using 看課程.Repositories.Interfaces;
+﻿using 看課程.Repositories.Identity.Interfaces;
 using 看課程.DataAccess.Identity.Entity;
 using 看課程.DataAccess.Identity.Interface;
-
 
 namespace 看課程.DataAccess.Identity
 {
@@ -16,18 +15,16 @@ namespace 看課程.DataAccess.Identity
         //　　　↑↑↑↑注入repositoy
 
 
-
-        public async Task<UserDataToDB> GetUserByEmailAsync(string email)
+        public async Task<UserAccountToDB> GetUserByEmailAsync(string email)
         {
             return await _userToDbRepository.GetUserByEmailAsync(email);
         }
-        public async Task<UserDataToDB> FindUserByIdAsync(string userId)
+        public async Task<UserAccountToDB> FindUserByIdAsync(string userId)
         {
-            return await _userToDbRepository.FindUserByIdAsync(userId);
+            return await _userToDbRepository.GetUserByIdAsync(userId);
         }
 
-
-        public async Task InsertUserAsync(UserDataToDB user)
+        public async Task InsertUserAsync(UserAccountToDB user)
         {
             await _userToDbRepository.InsertUserAsync(user);
         }

@@ -7,7 +7,7 @@ namespace Service.Identity.Interface
     public interface IIdentityService
     {
 
-        Task<RegisterRes> Register(RegisterReq registerRequest);
+        Task<RegisterRes> Register(RegisterReq registerReq);
         
         Task<LoginRes> Login(LoginReq loginRequest);
 

@@ -19,9 +19,9 @@ namespace 看課程.Controllers
         //=====================================================================================
         //=====================================================================================
         [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] RegisterReq userRequest)
+        public async Task<IActionResult> Register([FromBody] RegisterReq registerReq)
         {
-            RegisterRes result = await _identityService.Register(userRequest);
+            RegisterRes result = await _identityService.Register(registerReq);
             return result.Success ? Ok(result) : Unauthorized(result);
             //return CreatedAtAction(nameof(Register), new { id = userRequest.Id }, userRequest);
         }

@@ -1,15 +1,12 @@
-﻿//using 看課程.Service.Identity.Requests;
+﻿
 using 看課程.DataAccess.Identity.Entity;
-
-
-namespace 看課程.DataAccess.Identity.Interface
+namespace 看課程.Repositories.Identity.Interfaces
 {
-    public interface IIdentityDataAccess
+    public interface IUserToDbRepository
     {
         Task<UserAccountToDB> GetUserByEmailAsync(string email);
+        Task<UserAccountToDB> GetUserByIdAsync(string userId);
         Task InsertUserAsync(UserAccountToDB user);
-        Task<UserAccountToDB> FindUserByIdAsync(string userId);
         Task<bool> UpdateUserJtiAsync(string userId, string newJti);
-
     }
 }

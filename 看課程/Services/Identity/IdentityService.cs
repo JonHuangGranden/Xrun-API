@@ -44,10 +44,10 @@ namespace 看課程.Services.Identity
 
 
 
-        public async Task<RegisterRes> Register(RegisterReq userRequestToRegister)
+        public async Task<RegisterRes> Register(RegisterReq registerReq)
         {
             //var existingUser = await _usersCollection.Find(u => u.Email == userRequestToRegister.Email).FirstOrDefaultAsync();
-            var existingUser = await _dataAccess.GetUserByEmailAsync(userRequestToRegister.Email);//改用dal的
+            var existingUser = await _dataAccess.GetUserByEmailAsync(registerReq.Email);//改用dal的
 
             if (existingUser != null)
             {
@@ -58,12 +58,12 @@ namespace 看課程.Services.Identity
                 };
             }
             var salt = PasswordWithSaltHashHelper.GenerateSalt();
-            var passwordHash = PasswordWithSaltHashHelper.GenerateHash(userRequestToRegister.Password, salt);
-            var user = new UserDataToDB()
+            var passwordHash = PasswordWithSaltHashHelper.GenerateHash(registerReq.Password, salt);
+            var user = new UserAccountToDB()
             {
-                Id = userRequestToRegister.Id,
-                Email = userRequestToRegister.Email,
-                Name = userRequestToRegister.Name,
+            //    Id = registerReq.Id,
+                Email = registerReq.Email,
+                Name = registerReq.Name,
                 PasswordToHash = passwordHash,
                 Salt = salt
             };
@@ -181,7 +181,7 @@ namespace 看課程.Services.Identity
                 }
                 //====　↓　驗證通過　↓　====
                 string jtiString = Guid.NewGuid().ToString();
-                var update = Builders<UserDataToDB>.Update.Set(u => u.CurrJTI, jtiString);
+                var update = Builders<UserAccountToDB>.Update.Set(u => u.CurrJTI, jtiString);
 
              
           //     await _usersCollection.UpdateOneAsync(u => u.Id == user.Id, update);

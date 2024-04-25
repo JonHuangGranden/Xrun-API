@@ -6,11 +6,20 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
     <Compile Remove="NewFolder1\**" />
     <Content Remove="NewFolder1\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <None Remove="NewFolder1\**" />
+    <None Remove="DataAccess\UserInfo\" />
+    <None Remove="DataAccess\UserInfo\Interface\" />
+    <None Remove="DataAccess\UserInfo\Entity\" />
+    <None Remove="Repositories\Identity\" />
+    <None Remove="Repositories\UserInfo\" />
+    <None Remove="Repositories\Identity\Interfaces\" />
+    <None Remove="Repositories\UserInfo\Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +32,13 @@
   <ItemGroup>
     <Folder Include="Middleware\" />
     <Folder Include="Document\" />
+    <Folder Include="DataAccess\UserInfo\" />
+    <Folder Include="DataAccess\UserInfo\Interface\" />
+    <Folder Include="DataAccess\UserInfo\Entity\" />
+    <Folder Include="Repositories\Identity\" />
+    <Folder Include="Repositories\UserInfo\" />
+    <Folder Include="Repositories\Identity\Interfaces\" />
+    <Folder Include="Repositories\UserInfo\Interfaces\" />
   </ItemGroup>
 
 </Project>

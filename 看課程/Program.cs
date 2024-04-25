@@ -8,11 +8,66 @@ using 看課程.Extensions;
 using MongoDB.Driver;
 using 看課程.DataAccess.Identity.Interface;
 using 看課程.DataAccess.Identity;
-using 看課程.Repositories.Interfaces;
+using 看課程.Repositories.Identity.Interfaces;
 using 看課程.Repositories;
+using System.Xml.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using 看課程.DataAccess.Identity.Entity;
+using 看課程.DataAccess.UserInfo.Entity;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+//使用.GetSection("MongoDbSettings") 是从应用的配置系统（如 appsettings.json、环境变量等）中获取特定部分的配置。
+var mongoDbSettings = builder.Configuration.GetSection("MongoDbSettings").Get<MongoDbSettings>();
+
+
+//===寫法3     (透過extensions)
+builder.Services.AddMongoDBCollections(mongoDbSettings.ConnectionString, mongoDbSettings.DatabaseName);
+builder.Services.AddDBCollection<UserAccountToDB>("UsersAccount");
+builder.Services.AddDBCollection<UserInfoToDB>("UserInfo");
+//==
+
+
+//=====寫法2    (不在倉庫層處理db，並且有封裝)
+//builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
+//    new MongoClient(mongoDbSettings.ConnectionString)
+//);
+//void AddDBCollection<TDocument>(string collectionName)
+//{
+//    builder.Services.AddSingleton(serviceProvider =>
+//    {
+//        var mongoClient = serviceProvider.GetRequiredService<IMongoClient>();
+//        var database = mongoClient.GetDatabase(mongoDbSettings.DatabaseName);
+//        return database.GetCollection<TDocument>(collectionName);
+//    });
+//}
+//AddDBCollection<UserAccountToDB>("UsersAccount");
+//AddDBCollection<UserInfoToDB>("UserInfo");
+
+
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+//=====寫法1     (不在倉庫層處理db)
+//builder.Services.AddSingleton(serviceProvider =>
+//{
+//    var mongoClient = serviceProvider.GetRequiredService<IMongoClient>();
+//    var database = mongoClient.GetDatabase(mongoDbSettings.DatabaseName);
+//    var collection = database.GetCollection<UserAccountToDB>("UsersWithSalt");
+//    return collection;
+//});
+//builder.Services.AddSingleton(serviceProvider =>
+//{
+//    var mongoClient = serviceProvider.GetRequiredService<IMongoClient>();
+//    var database = mongoClient.GetDatabase(mongoDbSettings.DatabaseName);
+//    var collection = database.GetCollection<UserInfoToDB>("UserInfo");
+//    return collection;
+//});
+//=====
+//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 
 //== ▼cors▼ ===
@@ -28,7 +83,6 @@ var builder = WebApplication.CreateBuilder(args);
 //                        .AllowAnyHeader());  // 允許任何標頭
 //});
 builder.Services.AddCorsConfiguration();
-
 //== ▲cors▲ ===
 
 
@@ -49,27 +103,31 @@ builder.Services.AddJwtAuthentication("refreshToken_secretKey_testtesttest_22222
 
 
 
-builder.Services.Configure<MongoDbSettings>(
-    builder.Configuration.GetSection("MongoDbSettings")
-);
+//builder.Services.Configure<MongoDbSettings>(
+//    builder.Configuration.GetSection("MongoDbSettings")
+//);
+//这行代码将 MongoDbSettings 配置节注册到依赖注入（DI）系统中。它使配置数据可以通过 IOptions<MongoDbSettings> 或 IOptionsSnapshot<MongoDbSettings> 在需要时解析，通常在服务的构造函数中使用。
 
 
 
-// 配置授权
-//-----------------------------------------
-//builder.Services.AddAuthorization(options =>
-//{
-//    options.AddPolicy("ReqRole",
-//        policy => policy.RequireRole("Administrator"));
-//});
+    // 配置授权
+    //-----------------------------------------
+    //builder.Services.AddAuthorization(options =>
+    //{
+    //    options.AddPolicy("ReqRole",
+    //        policy => policy.RequireRole("Administrator"));
+    //});
+
 builder.Services.AddCustomAuthorization();
 
 //-----------------------------------------
 
-
 builder.Services.AddSingleton<IUserToDbRepository, UserToDbRepository>();
 builder.Services.AddSingleton<IIdentityDataAccess, IdentityDataAccess>();
+
 builder.Services.AddSingleton<IIdentityService, IdentityService>();
+
+
 
 
 //===============================
@@ -91,7 +149,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseDeveloperExceptionPage(); // ?
-
 }
 app.UseRouting();
 app.UseCors("AllowLocalhost5500");

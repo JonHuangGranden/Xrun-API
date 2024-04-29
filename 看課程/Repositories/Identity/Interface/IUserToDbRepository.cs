@@ -1,6 +1,6 @@
 ﻿
 using 看課程.DataAccess.Identity.Entity;
-namespace 看課程.Repositories.Identity.Interfaces
+namespace 看課程.Repositories.Identity.Interface
 {
     public interface IUserToDbRepository
     {

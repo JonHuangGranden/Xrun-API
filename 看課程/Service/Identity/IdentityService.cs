@@ -1,17 +1,15 @@
-﻿using Service.Identity.Interface;
-using 看課程.Service.Identity.Requests;
-
-using Common.Helper;
-using Microsoft.Extensions.Options;
-using MongoD;
+﻿using Common.Helper;
 using MongoDB.Driver;
-using 看課程.Service.Identity.Response;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using System.Diagnostics;
 using System.Linq;
+
+using Service.Identity.Interface;
 using 看課程.DataAccess.Identity.Interface;
 using 看課程.DataAccess.Identity.Entity;
+using 看課程.Service.Identity.Requests;
+using 看課程.Service.Identity.Response;
 
 
 namespace 看課程.Services.Identity
@@ -32,8 +30,6 @@ namespace 看課程.Services.Identity
         //var mongoDatabase = mongoClient.GetDatabase(mongoDbSettings.Value.DatabaseName);
         //_usersCollection = mongoDatabase.GetCollection<UserDataToDB>("UsersWithSalt");
         //}
-
-
 
     private readonly IIdentityDataAccess _dataAccess;
 
@@ -82,14 +78,11 @@ namespace 看課程.Services.Identity
      
         public async Task<LoginRes> Login(LoginReq loginReq)
         //=========== 登入成功 就更新db refresh token   ==============
-
         {
             try
             {
              //   var user = await _usersCollection.Find(u => u.Email == loginReq.UserEmail).FirstOrDefaultAsync();
                 var user = await _dataAccess.GetUserByEmailAsync(loginReq.UserEmail);//改用dal的
-
-
                 if (user == null)
                 {
                     return new LoginRes { Success = false, Msg = "帳號不存在" };
@@ -98,7 +91,6 @@ namespace 看課程.Services.Identity
                 {
                     if (PasswordWithSaltHashHelper.ValidatePassword(loginReq.UserPassword, user.PasswordToHash, user.Salt))
                     {
-
                         string jtiString = Guid.NewGuid().ToString();
 
                         //var update = Builders<UserDataToDB>.Update.Set(u => u.CurrJTI, jtiString);
@@ -177,7 +169,7 @@ namespace 看課程.Services.Identity
                 }
                 if (user.CurrJTI != jtiFromToken)
                 {
-                    return new RefreshTokenRes { Success = false, Msg = "jti不符，Refresh Token失效!" };
+                    return new RefreshTokenRes { Success = false, Msg = "jti不符，Refresh Token失效，請重新登入" };
                 }
                 //====　↓　驗證通過　↓　====
                 string jtiString = Guid.NewGuid().ToString();

@@ -8,12 +8,9 @@ namespace Service.Identity.Interface
     {
 
         Task<RegisterRes> Register(RegisterReq registerReq);
-        
+     
         Task<LoginRes> Login(LoginReq loginRequest);
-
         Task<RefreshTokenRes> verifyAccessToken(string token);
         Task<RefreshTokenRes> verifyRefreshToken(string token);
-
-
     }
 }

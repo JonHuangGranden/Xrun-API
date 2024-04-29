@@ -1,19 +1,23 @@
 ﻿using MongoD;
+using 看課程.Extensions;
+
+
+using 看課程.Repositories;
+//===
 using 看課程.Services.Identity;
 using Service.Identity.Interface;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using 看課程.Extensions;
-using MongoDB.Driver;
-using 看課程.DataAccess.Identity.Interface;
 using 看課程.DataAccess.Identity;
-using 看課程.Repositories.Identity.Interfaces;
-using 看課程.Repositories;
-using System.Xml.Linq;
-using Microsoft.Extensions.DependencyInjection;
+using 看課程.DataAccess.Identity.Interface;
 using 看課程.DataAccess.Identity.Entity;
+using 看課程.Repositories.Identity.Interface;
+//===
+using 看課程.Services.UserInfo;
+using 看課程.Service.UserInfo.Interface;
+using 看課程.DataAccess.UserInfo;
+using 看課程.DataAccess.UserInfo.Interface;
 using 看課程.DataAccess.UserInfo.Entity;
+using 看課程.Repositories.UserInfo.Interface;
+using 看課程.Repositories.UserInfo;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -120,7 +124,7 @@ builder.Services.AddJwtAuthentication("refreshToken_secretKey_testtesttest_22222
 
 builder.Services.AddCustomAuthorization();
 
-//-----------------------------------------
+//--------------------
 
 builder.Services.AddSingleton<IUserToDbRepository, UserToDbRepository>();
 builder.Services.AddSingleton<IIdentityDataAccess, IdentityDataAccess>();
@@ -130,7 +134,16 @@ builder.Services.AddSingleton<IIdentityService, IdentityService>();
 
 
 
-//===============================
+builder.Services.AddSingleton<IUserInfoRepository, UserInfoRepository>();
+builder.Services.AddSingleton<IUserInfoDataAccess, UserInfoDataAccess>();
+
+builder.Services.AddSingleton<IUserInfoService, UserInfoService>();
+
+
+
+
+
+//==================
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

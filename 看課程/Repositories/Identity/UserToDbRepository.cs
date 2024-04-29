@@ -1,5 +1,5 @@
 ﻿using MongoDB.Driver;
-using 看課程.Repositories.Identity.Interfaces;
+using 看課程.Repositories.Identity.Interface;
 using 看課程.DataAccess.Identity.Entity;
 using Microsoft.Extensions.Options;
 using MongoD;
@@ -48,14 +48,12 @@ namespace 看課程.Repositories
             await _usersCollection.InsertOneAsync(user);
         }
 
- 
         public async Task<bool> UpdateUserJtiAsync(string userId, string newJti)
         {
             var update = Builders<UserAccountToDB>.Update.Set(u => u.CurrJTI, newJti);
             var result = await _usersCollection.UpdateOneAsync(u => u.Id == userId, update);
             return result.ModifiedCount == 1;
         }
-
     }
 
 

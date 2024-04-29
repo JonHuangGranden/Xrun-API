@@ -1,4 +1,4 @@
-﻿using 看課程.Repositories.Identity.Interfaces;
+﻿using 看課程.Repositories.Identity.Interface;
 using 看課程.DataAccess.Identity.Entity;
 using 看課程.DataAccess.Identity.Interface;
 

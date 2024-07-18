@@ -29,6 +29,10 @@
     <None Remove="Service\UserInformation\Request\" />
     <None Remove="Service\UserInformation\Response\" />
     <None Remove="Service\UserInformation\Interface\" />
+    <None Remove="Service\GameData\" />
+    <None Remove="Service\GameData\Interface\" />
+    <None Remove="DataAccess\GameData\" />
+    <None Remove="Repositories\GameData\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,6 +59,10 @@
     <Folder Include="Service\UserInformation\Request\" />
     <Folder Include="Service\UserInformation\Response\" />
     <Folder Include="Service\UserInformation\Interface\" />
+    <Folder Include="Service\GameData\" />
+    <Folder Include="Service\GameData\Interface\" />
+    <Folder Include="DataAccess\GameData\" />
+    <Folder Include="Repositories\GameData\" />
   </ItemGroup>
 
 </Project>

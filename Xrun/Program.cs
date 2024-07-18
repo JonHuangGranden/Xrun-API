@@ -3,14 +3,14 @@ using Xrun.Extensions;
 
 
 using Xrun.Repositories;
-//===
+//
 using Xrun.Services.Identity;
 using Service.Identity.Interface;
 using Xrun.DataAccess.Identity;
 using Xrun.DataAccess.Identity.Interface;
 using Xrun.DataAccess.Identity.Entity;
 using Xrun.Repositories.Identity.Interface;
-//===
+//
 using Xrun.Services.UserInfo;
 using Xrun.Service.UserInfo.Interface;
 using Xrun.DataAccess.UserInfo;
@@ -18,20 +18,24 @@ using Xrun.DataAccess.UserInfo.Interface;
 using Xrun.DataAccess.UserInfo.Entity;
 using Xrun.Repositories.UserInfo.Interface;
 using Xrun.Repositories.UserInfo;
-//===
+//
 //using Xrun.Services.UserInformation;
 using Xrun.Service.UserInformation.Interface;
 using Xrun.DataAccess.UserInformation;
-
-
+//
 using Xrun.Service.UserInformation;
-
 using Xrun.DataAccess.UserInformation.Interface;
 using Xrun.DataAccess.UserInformation.Entity;
 using Xrun.Repositories.UserInformation;
 using Xrun.Repositories.UserInformation.Interface;
-
-
+//
+using Xrun.DataAccess.GameData.Entity;
+using Xrun.Repositories.UserGameDataRepository;
+using Xrun.Repositories.UserGameData.Interface;
+using Xrun.DataAccess.GameData.Interface;
+using Xrun.DataAccess.GameDataDataAccess;
+using Xrun.Service.GameData.Interface;
+using Xrun.Service.GameData;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,6 +54,9 @@ builder.Services.AddDBCollection<UserAccountEntity>("UsersAccount");
 builder.Services.AddDBCollection<UserInfoEntity>("UserInfo");
 
 builder.Services.AddDBCollection<UserInformationEntity>("UserInformation");
+
+builder.Services.AddDBCollection<UserAllGameDataList>("UserAllGameDataList");
+
 
 //==
 
@@ -145,24 +152,19 @@ builder.Services.AddCustomAuthorization();
 
 builder.Services.AddSingleton<IUserToDbRepository, UserToDbRepository>();
 builder.Services.AddSingleton<IIdentityDataAccess, IdentityDataAccess>();
-
 builder.Services.AddSingleton<IIdentityService, IdentityService>();
-
-
-
-
-
+//
 builder.Services.AddSingleton<IUserInfoRepository, UserInfoRepository>();
 builder.Services.AddSingleton<IUserInfoDataAccess, UserInfoDataAccess>();
-
 builder.Services.AddSingleton<IUserInfoService, UserInfoService>();
-
-
-
+//
 builder.Services.AddSingleton<IUserInformationRepository, UserInformationRepository>();
 builder.Services.AddSingleton<IUserInformationDataAccess, UserInformationDataAccess>();
-
 builder.Services.AddSingleton<IUserInformationService, UserInformationService>();
+//
+builder.Services.AddSingleton<IUserGameDataRepository, UserGameDataRepository>();
+builder.Services.AddSingleton<IGameDataDataAccess, GameDataDataAccess>();
+builder.Services.AddSingleton<IGameDataService, GameDataService>();
 
 
 

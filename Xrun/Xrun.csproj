@@ -16,10 +16,7 @@
     <None Remove="DataAccess\UserInfo\Interface\" />
     <None Remove="DataAccess\UserInfo\Entity\" />
     <None Remove="Repositories\Identity\" />
-    <None Remove="Repositories\UserInfo\" />
-    <None Remove="Repositories\UserInfo\Interfaces\" />
     <None Remove="Repositories\Identity\Interface\" />
-    <None Remove="DataAccess\UserInfo\" />
     <None Remove="Repositories\UserInformation\" />
     <None Remove="Repositories\UserInformation\Interface\" />
     <None Remove="DataAccess\UserInformation\" />
@@ -33,6 +30,10 @@
     <None Remove="Service\GameData\Interface\" />
     <None Remove="DataAccess\GameData\" />
     <None Remove="Repositories\GameData\" />
+    <None Remove="Repositories\BackpageUserData\" />
+    <None Remove="DataAccess\BackpageUserData\" />
+    <None Remove="Service\BackpageUserData\" />
+    <None Remove="Service\BackpageUserData\Interface\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,10 +47,7 @@
     <Folder Include="Middleware\" />
     <Folder Include="Document\" />
     <Folder Include="Repositories\Identity\" />
-    <Folder Include="Repositories\UserInfo\" />
-    <Folder Include="Repositories\UserInfo\Interfaces\" />
     <Folder Include="Repositories\Identity\Interface\" />
-    <Folder Include="DataAccess\UserInfo\" />
     <Folder Include="Repositories\UserInformation\" />
     <Folder Include="Repositories\UserInformation\Interface\" />
     <Folder Include="DataAccess\UserInformation\" />
@@ -63,6 +61,10 @@
     <Folder Include="Service\GameData\Interface\" />
     <Folder Include="DataAccess\GameData\" />
     <Folder Include="Repositories\GameData\" />
+    <Folder Include="Repositories\BackpageUserData\" />
+    <Folder Include="DataAccess\BackpageUserData\" />
+    <Folder Include="Service\BackpageUserData\" />
+    <Folder Include="Service\BackpageUserData\Interface\" />
   </ItemGroup>
 
 </Project>

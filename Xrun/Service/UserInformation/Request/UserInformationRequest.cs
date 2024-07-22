@@ -10,8 +10,8 @@ namespace Xrun.Service.UserInformation.Request
 
     public class UserInformationRequest
     {
-        public string Name { get; set; }
         public string NHINumber { get; set; }
+        public string Name { get; set; }
         public int Gender { get; set; }
         public DateTime Birthday { get; set; }
     }

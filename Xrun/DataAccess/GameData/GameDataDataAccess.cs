@@ -22,23 +22,20 @@ namespace Xrun.DataAccess.GameDataDataAccess
 
         }
 
-        public async Task<UserAllGameDataList> GetByNHINumberAsync(int nhiNumber)
+
+        public async Task<UserAllGameDataList> GetByNHINumberAsync(string nhiNumber)
         {
             return await _userGameDataRepository.GetByNHINumberAsync(nhiNumber);
         }
-
-        //public async Task InsertGameDataAsync<T>(T gameData) where T : class
-        //{
-        //    await _userGameDataRepository.InsertGameDataAsync(gameData);
-        //}
+     
         public async Task InsertGameDataAsync(object gameData)
         {
             await _userGameDataRepository.InsertGameDataAsync(gameData);
         }
 
-        public async Task InsertUserGameDataAsync(UserAllGameDataList userGameData)
+        public async Task InsertUserGameDataListAsync(UserAllGameDataList userGameData)
         {
-            await _userGameDataRepository.InsertUserGameDataAsync(userGameData);
+            await _userGameDataRepository.InsertUserGameDataListAsync(userGameData);
         }
 
 

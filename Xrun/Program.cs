@@ -11,14 +11,7 @@ using Xrun.DataAccess.Identity.Interface;
 using Xrun.DataAccess.Identity.Entity;
 using Xrun.Repositories.Identity.Interface;
 //
-using Xrun.Services.UserInfo;
-using Xrun.Service.UserInfo.Interface;
-using Xrun.DataAccess.UserInfo;
-using Xrun.DataAccess.UserInfo.Interface;
-using Xrun.DataAccess.UserInfo.Entity;
-using Xrun.Repositories.UserInfo.Interface;
-using Xrun.Repositories.UserInfo;
-//
+
 //using Xrun.Services.UserInformation;
 using Xrun.Service.UserInformation.Interface;
 using Xrun.DataAccess.UserInformation;
@@ -36,6 +29,10 @@ using Xrun.DataAccess.GameData.Interface;
 using Xrun.DataAccess.GameDataDataAccess;
 using Xrun.Service.GameData.Interface;
 using Xrun.Service.GameData;
+//
+using Xrun.Repositories.BackpageUserData;
+using Xrun.Service.BackpageUserData;
+using Xrun.Service.BackpageUserData.Interface;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,10 +48,10 @@ var mongoDbSettings = builder.Configuration.GetSection("MongoDbSettings").Get<Mo
 //===寫法3     (透過extensions)
 builder.Services.AddMongoDBCollections(mongoDbSettings.ConnectionString, mongoDbSettings.DatabaseName);
 builder.Services.AddDBCollection<UserAccountEntity>("UsersAccount");
-builder.Services.AddDBCollection<UserInfoEntity>("UserInfo");
+
+//builder.Services.AddDBCollection<UserInfoEntity>("UserInfo");
 
 builder.Services.AddDBCollection<UserInformationEntity>("UserInformation");
-
 builder.Services.AddDBCollection<UserAllGameDataList>("UserAllGameDataList");
 
 
@@ -154,10 +151,6 @@ builder.Services.AddSingleton<IUserToDbRepository, UserToDbRepository>();
 builder.Services.AddSingleton<IIdentityDataAccess, IdentityDataAccess>();
 builder.Services.AddSingleton<IIdentityService, IdentityService>();
 //
-builder.Services.AddSingleton<IUserInfoRepository, UserInfoRepository>();
-builder.Services.AddSingleton<IUserInfoDataAccess, UserInfoDataAccess>();
-builder.Services.AddSingleton<IUserInfoService, UserInfoService>();
-//
 builder.Services.AddSingleton<IUserInformationRepository, UserInformationRepository>();
 builder.Services.AddSingleton<IUserInformationDataAccess, UserInformationDataAccess>();
 builder.Services.AddSingleton<IUserInformationService, UserInformationService>();
@@ -165,6 +158,10 @@ builder.Services.AddSingleton<IUserInformationService, UserInformationService>()
 builder.Services.AddSingleton<IUserGameDataRepository, UserGameDataRepository>();
 builder.Services.AddSingleton<IGameDataDataAccess, GameDataDataAccess>();
 builder.Services.AddSingleton<IGameDataService, GameDataService>();
+//
+builder.Services.AddSingleton<IBackpageUserDataRepository, BackpageUserDataRepository>();
+builder.Services.AddSingleton<IBackpageUserDataService, BackpageUserDataService>();
+
 
 
 

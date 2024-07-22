@@ -1,5 +1,4 @@
 ﻿using System;
-using Xrun.DataAccess.UserInfo.Entity;
 using Xrun.DataAccess.UserInformation.Entity;
 
 namespace Xrun.DataAccess.UserInformation.Interface

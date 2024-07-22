@@ -17,20 +17,17 @@ namespace Xrun.Controllers
             _userinformationService = userInformationService;
         }
 
+
+        /// <summary>
+        /// 存入健保卡資料
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] NHINumberRequest NHINumberRequest)
+        public async Task<IActionResult> Login([FromBody] UserInformationRequest userInformationRequest)
         {
-            LoginResponse result = await _userinformationService.Login(NHINumberRequest);
+            LoginResponse result = await _userinformationService.Login(userInformationRequest);
             return result.IsSuccess ? Ok(result) : NotFound(result);
         }
-
-        [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] UserInformationRequest userInformationRequest)
-        {
-            RegisterResponse result = await _userinformationService.Register(userInformationRequest);
-            return result.IsSuccess ? Ok(result) : NotFound(result);
-
-        }
-
+  
     }
 }

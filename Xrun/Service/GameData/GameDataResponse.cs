@@ -2,9 +2,9 @@
 namespace Xrun.Service.GameData
 {
   
-	public class CreateGameDataResponse
-	{
-	}
-	
-}
+	public class InsertGameDataResponse
+	{		
+        public bool IsSuccess { get; set; }
+    }
 
+}

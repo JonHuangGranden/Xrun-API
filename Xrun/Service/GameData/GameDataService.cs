@@ -8,6 +8,7 @@ using Xrun.Service.UserInformation.Request;
 using Xrun.DataAccess.GameDataDataAccess;
 using Xrun.DataAccess.GameData.Interface;
 using Xrun.DataAccess.GameData.Entity;
+using Xrun.Service.GameData;
 
 namespace Xrun.Service.GameData
 {
@@ -22,25 +23,34 @@ namespace Xrun.Service.GameData
         }
 
 
-        public async Task CreateOrUpdateGameDataAsync(object gameData)
+
+        public async Task<InsertGameDataResponse> CreateOrUpdateGameDataAsync(object gameData)
         {
-            int nhiNumber = (int)gameData.GetType().GetProperty("NHINumber").GetValue(gameData);
 
-            var existingUserGameData = await _gameDataDataAccess.GetByNHINumberAsync(nhiNumber);
-            if (existingUserGameData == null)
-            {
-                // 创建新的用户游戏数据
-                existingUserGameData = new UserAllGameDataList
+            try {
+                string nhiNumber = (string)gameData.GetType().GetProperty("NHINumber").GetValue(gameData);
+
+                var existingUserGameData = await _gameDataDataAccess.GetByNHINumberAsync(nhiNumber);
+                if (existingUserGameData == null)
                 {
-                    NHINumber = nhiNumber
-                };
+                    existingUserGameData = new UserAllGameDataList
+                    {
+                        NHINumber = nhiNumber
+                    };
+                    await _gameDataDataAccess.InsertUserGameDataListAsync(existingUserGameData);
+                    //創一筆用戶的遊戲存放List
+                }
 
-                // 插入新的用户游戏数据到数据库
-                await _gameDataDataAccess.InsertUserGameDataAsync(existingUserGameData);
+                await _gameDataDataAccess.InsertGameDataAsync(gameData);
+                // 插入新遊戲紀錄
+
+                return new InsertGameDataResponse { IsSuccess = true };                 
+            }
+            catch 
+            {
+                return new InsertGameDataResponse { IsSuccess = false }; 
             }
 
-            // 插入或更新游戏数据
-            await _gameDataDataAccess.InsertGameDataAsync(gameData);
         }
 
 
@@ -49,9 +59,5 @@ namespace Xrun.Service.GameData
 
     }
 }
-
-
-
-
 
 

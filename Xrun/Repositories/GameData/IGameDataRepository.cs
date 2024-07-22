@@ -13,8 +13,11 @@ namespace Xrun.Repositories.UserGameData.Interface
 
         //Task InsertGameDataAsync<T>(T gameData) where T : class;
 
-        Task<UserAllGameDataList> GetByNHINumberAsync(int nhiNumber);
-        Task InsertUserGameDataAsync(UserAllGameDataList userGameData);
+
+        //Task<List<UserAllGameDataList>> GetAllUserGameDataAsync();
+
+        Task<UserAllGameDataList> GetByNHINumberAsync(string nhiNumber);
+        Task InsertUserGameDataListAsync(UserAllGameDataList userGameData);
         Task InsertGameDataAsync(object gameData);
 
     }

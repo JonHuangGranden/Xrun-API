@@ -22,51 +22,39 @@ namespace Xrun.Service.UserInformation
         }
 
 
-        public async Task<LoginResponse> Login(NHINumberRequest NHINumberRequest)
+        public async Task<LoginResponse> Login(UserInformationRequest userInformationRequest)
         {
-            var userInformationEntity = await _userInformationDataAccess.GetUserByNHINumberAsync(NHINumberRequest.NHINumber);
+            //string nhiNumber = (string)userInformationRequest.GetType().GetProperty("NHINumber").GetValue(userInformationRequest);
+            //可以不用反射 因為已經指定UserInformationRequest類別了
+            string nhiNumber = userInformationRequest.NHINumber;
+            Console.WriteLine(nhiNumber);
 
+            var userInformationEntity = await _userInformationDataAccess.GetUserByNHINumberAsync(nhiNumber);
+            Console.WriteLine(userInformationEntity);
             if (userInformationEntity == null)
             {
+                var newUserEntity = new UserInformationEntity
+                {
+                    NHINumber = userInformationRequest.NHINumber,
+                    Name = userInformationRequest.Name,
+                    Gender = userInformationRequest.Gender,
+                    Birthday = userInformationRequest.Birthday,
+                };
+                await _userInformationDataAccess.InsertUserInformationAsync(newUserEntity);
+
                 return new LoginResponse
                 {
-                    IsSuccess = false,
-                    Message = "無此用戶"
+                    IsSuccess = true,
+                    Message = "無此用戶，已成功註冊並登入"
                 };
             }
-
             return new LoginResponse
             {
                 IsSuccess = true,
                 Message = "登入成功"
             };
-
         }
 
-
-        //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-
-        public async Task<RegisterResponse> Register(UserInformationRequest userInformationRequest)
-        {
-
-            var userInformationEntity = new UserInformationEntity
-            {
-                NHINumber = userInformationRequest.NHINumber,
-                Name = userInformationRequest.Name,
-                Gender = userInformationRequest.Gender,
-                Birthday = userInformationRequest.Birthday,
-            };
-
-            await _userInformationDataAccess.InsertUserInformationAsync(userInformationEntity);
-
-            return new RegisterResponse
-            {
-                IsSuccess = true,
-                Message = "註冊成功"
-            };
-
-
-        }       
 
 
     }

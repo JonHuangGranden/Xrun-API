@@ -11,9 +11,7 @@ namespace Xrun.Service.UserInformation.Interface
     public interface IUserInformationService
     {
 
-        Task<LoginResponse> Login(NHINumberRequest NHINumberRequest);
-        Task<RegisterResponse> Register(UserInformationRequest userInformationRequest);
-
+        Task<LoginResponse> Login(UserInformationRequest userInformationRequest);
        
     }
 }

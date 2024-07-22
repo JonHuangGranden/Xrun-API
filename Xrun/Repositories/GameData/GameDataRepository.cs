@@ -16,13 +16,20 @@ namespace Xrun.Repositories.UserGameDataRepository
             _userGameDataCollection = userGameDataCollection;
         }
 
-        public async Task<UserAllGameDataList> GetByNHINumberAsync(int nhiNumber)
+
+        //public async Task<List<UserAllGameDataList>> GetAllUserGameDataAsync()
+        //{
+        //    return await _userGameDataCollection.Find(_ => true).ToListAsync();
+        //}
+     
+
+        public async Task<UserAllGameDataList> GetByNHINumberAsync(string nhiNumber)
         {
             return await _userGameDataCollection.Find(x => x.NHINumber == nhiNumber).FirstOrDefaultAsync();
         }
 
 
-        public async Task InsertUserGameDataAsync(UserAllGameDataList userGameData)
+        public async Task InsertUserGameDataListAsync(UserAllGameDataList userGameData)
         {
             await _userGameDataCollection.InsertOneAsync(userGameData);
         }
@@ -30,7 +37,9 @@ namespace Xrun.Repositories.UserGameDataRepository
 
         public async Task InsertGameDataAsync(object gameData)
         {
-            int nhiNumber = (int)gameData.GetType().GetProperty("NHINumber").GetValue(gameData);
+            string nhiNumber = (string)gameData.GetType().GetProperty("NHINumber").GetValue(gameData);
+            //string nhiNumber = gameData.NHINumber; 要寫上面那樣，才能動態存取資料value，因為是object，不確定會進來什麼東西
+
             var filter = Builders<UserAllGameDataList>.Filter.Eq(x => x.NHINumber, nhiNumber);
 
             UpdateDefinition<UserAllGameDataList> update;
@@ -52,7 +61,7 @@ namespace Xrun.Repositories.UserGameDataRepository
             }
             else
             {
-                throw new ArgumentException("Unsupported game data type");
+                throw new ArgumentException("");
             }
 
             await _userGameDataCollection.UpdateOneAsync(filter, update, new UpdateOptions { IsUpsert = true });

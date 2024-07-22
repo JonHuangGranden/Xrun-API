@@ -8,16 +8,7 @@ namespace Xrun.Service.UserInformation.Response
         public string Message { get; set; }
     }
 
-    public class RegisterResponse
-    {
-        public bool IsSuccess { get; set; }
-        public string Message { get; set; }
-    }
 
-    public class UserInformationResponse
-    {
-     
-    }
 }
 
 

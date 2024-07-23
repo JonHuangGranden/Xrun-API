@@ -17,11 +17,7 @@ namespace Xrun.Repositories.UserGameDataRepository
         }
 
 
-        //public async Task<List<UserAllGameDataList>> GetAllUserGameDataAsync()
-        //{
-        //    return await _userGameDataCollection.Find(_ => true).ToListAsync();
-        //}
-     
+   
 
         public async Task<UserAllGameDataList> GetByNHINumberAsync(string nhiNumber)
         {

@@ -20,18 +20,26 @@ namespace Xrun.Repositories.UserInformation
             _usersCollection = collection;
         }
 
-        //Task<UserInformationEntity> GetUserByNHINumberAsync(string nhiNumber);
-        //Task InsertUserAsync(UserInformationEntity userInformationEntity);
 
         public async Task<UserInformationEntity> GetUserByNHINumberAsync(string nhiNumber)
         {
             return await _usersCollection.Find(u => u.NHINumber == nhiNumber).FirstOrDefaultAsync();
         }
 
+
+        public async Task<List<UserInformationEntity>> GetAllUserInformationAsync()
+        {
+            return await _usersCollection.Find(_ => true).ToListAsync();
+        }
+
         public async Task InsertUserAsync(UserInformationEntity userInformationEntity)
         {
             await _usersCollection.InsertOneAsync(userInformationEntity);
         }
+
+
+
+
     }
 }
 

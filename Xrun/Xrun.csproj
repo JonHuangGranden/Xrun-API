@@ -31,7 +31,6 @@
     <None Remove="DataAccess\GameData\" />
     <None Remove="Repositories\GameData\" />
     <None Remove="Repositories\BackpageUserData\" />
-    <None Remove="DataAccess\BackpageUserData\" />
     <None Remove="Service\BackpageUserData\" />
     <None Remove="Service\BackpageUserData\Interface\" />
   </ItemGroup>
@@ -62,7 +61,6 @@
     <Folder Include="DataAccess\GameData\" />
     <Folder Include="Repositories\GameData\" />
     <Folder Include="Repositories\BackpageUserData\" />
-    <Folder Include="DataAccess\BackpageUserData\" />
     <Folder Include="Service\BackpageUserData\" />
     <Folder Include="Service\BackpageUserData\Interface\" />
   </ItemGroup>

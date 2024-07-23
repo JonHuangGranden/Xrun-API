@@ -28,20 +28,7 @@ namespace Xrun.Controllers
         {          
             var result = await _backpageUserDataService.GetBackpageUserAllGameDataListAsync(nhiNumberRequest);
             return Ok(result);
-        }
-
-
-        /// <summary>
-        /// 取得所有用戶遊戲資料
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost("GetAllUserGameData")]
-        public async Task<IActionResult> GetUserAllGameData()
-        {
-            var result = await _backpageUserDataService.GetAllUserGameDataAsync();
-            return Ok(result);
-        }
-
+        } 
 
 
     }

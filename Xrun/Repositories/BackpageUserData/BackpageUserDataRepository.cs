@@ -28,12 +28,7 @@ namespace Xrun.Repositories.BackpageUserData
             Console.WriteLine(nhiNumber);
             return await _userGameDataCollection.Find(x => x.NHINumber == nhiNumber).FirstOrDefaultAsync();
         }
-
-        public async Task<List<UserAllGameDataList>> GetAllUserGameDataAsync()
-        {
-            return await _userGameDataCollection.Find(_ => true).ToListAsync();
-        }
-
+    
 
     }
 }

@@ -22,6 +22,13 @@ namespace Xrun.Service.UserInformation
         }
 
 
+        public async Task<List<UserInformationEntity>> GetAllUserInformation()
+        {
+            var result = await _userInformationDataAccess.GetAllUserInformationAsync();
+            return result;
+        }
+
+
         public async Task<LoginResponse> Login(UserInformationRequest userInformationRequest)
         {
             //string nhiNumber = (string)userInformationRequest.GetType().GetProperty("NHINumber").GetValue(userInformationRequest);

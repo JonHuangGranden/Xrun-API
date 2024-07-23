@@ -28,6 +28,14 @@ namespace Xrun.Controllers
             LoginResponse result = await _userinformationService.Login(userInformationRequest);
             return result.IsSuccess ? Ok(result) : NotFound(result);
         }
-  
+
+
+        [HttpPost("GetAllUserInformation")]
+        public async Task<IActionResult> GetAllUserInformation()
+        {
+            var result = await _userinformationService.GetAllUserInformation();
+            return Ok(result);
+        }
+
     }
 }

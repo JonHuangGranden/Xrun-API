@@ -22,12 +22,15 @@ namespace Xrun.DataAccess.UserInformation
             return await _userInformationRepository.GetUserByNHINumberAsync(nhiNumber);
         }
 
+        public async Task<List<UserInformationEntity>> GetAllUserInformationAsync()
+        {
+            return await _userInformationRepository.GetAllUserInformationAsync();
+        }
 
         public async Task InsertUserInformationAsync(UserInformationEntity userInformationEntity)
         {
             await _userInformationRepository.InsertUserAsync(userInformationEntity);
         }
-
 
     }
 }

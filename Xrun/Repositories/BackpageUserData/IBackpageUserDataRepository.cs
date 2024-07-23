@@ -9,8 +9,6 @@ namespace Xrun.Repositories.BackpageUserData
     {
 
         Task<UserAllGameDataList> GetByNHINumberAsync(NHINumberRequest nhiNumberRequest);
-        Task<List<UserAllGameDataList>> GetAllUserGameDataAsync();
-
 
     }
 }

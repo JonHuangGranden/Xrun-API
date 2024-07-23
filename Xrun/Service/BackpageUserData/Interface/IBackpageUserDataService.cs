@@ -6,13 +6,7 @@ namespace Xrun.Service.BackpageUserData.Interface
 {
 	public interface IBackpageUserDataService
 	{
-
-        //Task<BackpageAllUserInformation> GetBackpageAllUserInformationAsync();
-
         Task<UserAllGameDataList> GetBackpageUserAllGameDataListAsync(NHINumberRequest nhiNumberRequest);
-        Task<List<UserAllGameDataList>> GetAllUserGameDataAsync();
-
-
 
     }
 }

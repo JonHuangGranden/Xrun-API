@@ -28,20 +28,6 @@ namespace Xrun.Service.BackpageUserData
         }
 
 
-        public async Task<List<UserAllGameDataList>> GetAllUserGameDataAsync()
-        {
-            var result = await _backpageUserDataRepository.GetAllUserGameDataAsync();
-            return result;
-        }
-
-
-        //public async Task<BackpageAllUserInformation> GetBackpageAllUserInformationAsync(string nhiNumber)
-        //{
-        //    await _backpageUserDataRepository.GetByNHINumberAsync(nhiNumber);
-
-        //    return new BackpageAllUserInformation();
-        //}
-
 
     }
 }
